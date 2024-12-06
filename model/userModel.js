@@ -30,6 +30,10 @@ WHERE uid = ?
         const query = "UPDATE user SET isDeleted = 1 WHERE id = ?";
         return this.executeQuery(query, [id]);
     }
+    async blockUser(id) {
+        const query = "UPDATE sellerinfo SET isBlocked = 1 WHERE id = ?";
+        return this.executeQuery(query, [id]);
+    }
 
     async login(email) {
         const query = "SELECT * FROM user WHERE email = ? AND isDeleted = 0";

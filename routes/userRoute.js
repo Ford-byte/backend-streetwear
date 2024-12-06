@@ -23,6 +23,7 @@ router.post('/user/profile/:uid', userController.getProfile)
 router.put('/user/:id', userController.updateUser);
 router.post('/user/:id', userController.getUserById);
 router.delete('/user/:id', userController.deleteUser);
+router.delete('/userBlock/:id', userController.blockUser);
 
 module.exports = router;
 

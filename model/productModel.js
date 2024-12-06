@@ -42,7 +42,7 @@ class Model {
 
     
     async insert(data) {
-        const query = `INSERT INTO product (id, costumerFeedback_id, name, size_id, images) VALUES (?, ?, ?, ?, ?)`;
+        const query = `INSERT INTO product (id, costumerFeedback_id, name, size_id, images,seller_id) VALUES (?, ?, ?, ?, ?, ?)`;
 
         try {
             return new Promise((resolve, reject) => {
@@ -140,6 +140,11 @@ class Model {
         const query = "UPDATE product SET isDeleted = 1 WHERE id = ?";
         connection.query(query, id, callback)
     }
+    async deleteAllProduct(id, callback){
+        const query = "UPDATE product SET isDeleted = 1 WHERE seller_id = ?";
+        connection.query(query, id, callback) 
+    }
+
     async approve(id, callback) {
         const query = "UPDATE product SET isApproved = 1 WHERE id = ?";
         connection.query(query, id, callback)

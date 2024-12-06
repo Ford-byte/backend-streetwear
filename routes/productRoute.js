@@ -32,6 +32,7 @@ router.get('/products/size/:size/category/:category', productController.getProdu
 router.post('/buy/product', productController.buyProduct);
 router.put('/cancel/order', productController.cancelProduct);
 router.delete('/product/:id', productController.deleteProduct);
+router.delete('/allproduct/:id', productController.deleteAllProduct);
 router.put('/product/approve/:id', productController.approveProduct);
 router.put('/product/disapprove/:id', productController.disapproveProduct);
 router.put('/product/:id', productController.updateProduct);

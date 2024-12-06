@@ -245,6 +245,17 @@ class UserController {
             res.status(500).json({ message: "Internal Server Error" });
         }
     }
+    
+    async blockUser(req, res) {
+        const id = req.params.id;
+        try {
+            await UserModel.blockUser(id);
+            res.status(200).json({ message: "User blocked!" });
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            res.status(500).json({ message: "Internal Server Error" });
+        }
+    }
 
     // async userExists(req, res) {
     //     const email = req.body.email;

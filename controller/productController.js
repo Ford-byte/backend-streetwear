@@ -64,6 +64,7 @@ class Controller {
             stockLarge,
             stockXlarge,
             price,
+            seller_id
         } = req.body;
         const files = req.files;
     
@@ -93,7 +94,7 @@ class Controller {
         });
     
         const sizeId = uuidv4();
-        const insertData = [uuidv4(), uuidv4(), name, sizeId, images.join(',')];
+        const insertData = [uuidv4(), uuidv4(), name, sizeId, images.join(','),seller_id];
         const stockInData = [sizeId, stockSmall, stockMedium, stockLarge, stockXlarge, price, category];
     
         try {
@@ -151,6 +152,15 @@ class Controller {
         })
     }
 
+    async deleteAllProduct(req,res){
+        const id = req.params.id;
+        productModel.deleteAllProduct(id, (error, result) => {
+            if (error) {
+                return res.send({ messaege: "Internal Server Error!" })
+            }
+            res.send({ messaege: "Product data successfully deleted!" })
+        })
+    }
     async approveProduct(req, res) {
         const id = req.params.id;
         productModel.approve(id, (error, result) => {
