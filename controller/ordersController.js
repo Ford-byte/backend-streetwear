@@ -16,7 +16,8 @@ class UserController {
     }
     async getUserProducts(req, res) {
         try {
-            const result = await ordersModel.getUserOrders();
+            const id = req.params.id;
+            const result = await ordersModel.getUserOrders([id]);
             const response = columnRenamer(result);
             res.status(200).json({ response });
         } catch (error) {

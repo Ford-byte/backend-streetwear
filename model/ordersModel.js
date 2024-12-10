@@ -12,15 +12,36 @@ class Model {
         // FROM orders WHERE isDeleted = 0 ORDER BY isCreated DESC;`
         return this.executeQuery(query);
     }
-    async getUserOrders() {
-        const query = "SELECT * FROM orders WHERE isCostumerDeleted = 0 ORDER BY isCreated DESC";
+    async getUserOrders(id) {
+        // const query = "SELECT * FROM orders WHERE isCostumerDeleted = 0 AND uid = ? ORDER BY isCreated DESC";
         //     const query = `SELECT 
         // *,
         // DATE(isCreated) AS date_only,
         // TIME(isCreated) AS time_only,
         // DATE_FORMAT(isCreated, '%Y-%m-%d %H:%i:%s') AS formatted_date_time
         // FROM orders WHERE isDeleted = 0 ORDER BY isCreated DESC;`
-        return this.executeQuery(query);
+        const query=`SELECT 
+    orders.*, 
+    product.seller_id, 
+    user.name AS seller_name 
+FROM 
+    orders 
+JOIN 
+    product 
+ON 
+    orders.pid = product.id 
+JOIN 
+    user 
+ON 
+    product.seller_id = user.id 
+WHERE 
+    orders.isCostumerDeleted = 0 
+    AND orders.uid = ? 
+ORDER BY 
+    orders.isCreated DESC;
+
+`;
+        return this.executeQuery(query , id);
     }
     async insertOrder(data) {
         const query = "INSERT INTO orders(id,uid,pid,checkoutSessionId,paymentIntentId,uname,pname,price,size,quantity,location,isDeleted) VALUES(?,?,?,?,?,?,?,?,?,?,?,0)";

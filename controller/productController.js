@@ -6,13 +6,85 @@ const { handleMultipleFileUpload } = require("../middlewares/multer");
 
 class Controller {
     async getProducts(req, res) {
+        // productModel.get((error, result) => {
+        //     if (error) {
+        //         return res.status(500).json({ message: "Internal server error!" });
+        //     }
+        
+        //     const products = columnRenamer(result);
+            
+        //     // Process each product and include separated images and indices
+        //     const updatedProducts = products.map((product, index) => {
+        //         let separatedImages = [];
+                
+        //         // If images are comma-separated, split them and trim whitespace
+        //         if (product.SW_Images && product.SW_Images.includes(',')) {
+        //             separatedImages = product.SW_Images.split(',').map(image => image.trim());
+        //         } else if (product.SW_Images) {
+        //             // If only one image, just add it to the array
+        //             separatedImages = [product.SW_Images.trim()];
+        //         }
+        
+        //         // Return the updated product object with the separated images
+        //         return {
+        //             ...product,  // Keep existing properties
+        //             images: separatedImages  // Add the separated images array
+        //         };
+        //     });
+        
+        //     // Prepare three separate objects for the response
+         
+        
+        //     const imageData = updatedProducts.map(product => product.images);
+            
+        //     const indices = updatedProducts.map((_, index) => index);
+        
+        //     // Send the response with separate objects for products, images, and indices
+        //     res.status(200).json({
+        //         products: products,  
+        //         image:imageData,  
+        //         index:indices      
+        //     });
+        // });
         productModel.get((error, result) => {
             if (error) {
                 return res.status(500).json({ message: "Internal server error!" });
             }
+        
             const products = columnRenamer(result);
-            res.status(200).json({ products })
-        })
+        
+            // Process each product and include separated images as nested arrays
+            const updatedProducts = products.map((product, index) => {
+                let structuredImages = [];
+        
+                if (product.SW_Images && product.SW_Images.includes(',')) {
+                    // Split by comma and wrap each image in an individual array
+                    structuredImages = product.SW_Images.split(',').map(image => [image.trim()]);
+                } else if (product.SW_Images) {
+                    // Wrap the single image in an array
+                    structuredImages = [[product.SW_Images.trim()]];
+                }
+        
+                // Return the updated product object with the structured images
+                return {
+                    ...product,  // Keep existing properties
+                    images: structuredImages  // Add the structured images array
+                };
+            });
+        
+            // Extract images and indices for the response
+            const imageData = updatedProducts.map(product => product.images);
+            const indices = updatedProducts.map((_, index) => index);
+        
+            // Send the response with structured images and other details
+            res.status(200).json({
+                products: products,  
+                image: imageData,  
+                index: indices      
+            });
+        });
+        
+        
     }
 
     async getProductsbyCategory(req, res) {
